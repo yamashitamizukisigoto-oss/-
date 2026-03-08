@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>大工用フロア見積アプリ完全版</title>
+  <meta name="theme-color" content="#111111" />
+  <style>
+    :root{
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --primary:#111111;
+      --accent:#0f766e;
+      --danger:#b91c1c;
+      --soft:#f9fafb;
+      --shadow:0 8px 20px rgba(0,0,0,.06);
+      --radius:16px;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+      line-height:1.45;
+      padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    }
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:16px;
+    }
+    .hero{
+      margin-bottom:14px;
+    }
+    h1{
+      font-size:28px;
+      margin:0 0 6px;
+      letter-spacing:.02em;
+    }
+    .lead{
+      color:var(--muted);
+      font-size:14px;
+      margin:0;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin-bottom:14px;
+    }
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:12px;
+    }
+    h2{
+      font-size:18px;
+      margin:0;
+    }
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .grid{
+      display:grid;
+      gap:12px;
+    }
+    .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .full{grid-column:1/-1}
+    label{
+      display:block;
+      margin:0 0 6px;
+      font-size:12px;
+      font-weight:700;
+      color:#374151;
+    }
+    input,select,textarea,button{
+      width:100%;
+      font-size:16px;
+      border-radius:12px;
+      border:1px solid #d1d5db;
+      background:#fff;
+      padding:12px 13px;
+      color:var(--text);
+    }
+    textarea{min-height:88px;resize:vertical}
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:#0f766e;
+      box-shadow:0 0 0 3px rgba(15,118,110,.12);
+    }
+    button{
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:auto;
+      min-width:120px;
+    }
+    .btn.primary{background:var(--primary);color:#fff}
+    .btn.sub{background:#eef2f7;color:#111827}
+    .btn.green{background:var(--accent);color:#fff}
+    .btn.danger{background:var(--danger);color:#fff}
+    .btn.ghost{
+      background:#fff;
+      color:#111827;
+      border:1px solid var(--line);
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .preset-links{
+      margin-top:10px;
+      font-size:13px;
+      line-height:1.7;
+      color:#374151;
+    }
+    .preset-links a{
+      color:#0f766e;
+      text-decoration:none;
+      margin-left:8px;
+      word-break:break-all;
+    }
+    .pill{
+      display:inline-block;
+      border-radius:999px;
+      padding:4px 8px;
+      background:#f3f4f6;
+      font-size:12px;
+      color:#374151;
+      margin-top:6px;
+    }
+    .rooms{
+      display:grid;
+      gap:10px;
+    }
+    .room{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:var(--soft);
+    }
+    .room-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .room-name-badge{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .room-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .room-actions .btn{
+      min-width:82px;
+      padding:10px 12px;
+      font-size:13px;
+    }
+    .room-grid{
+      display:grid;
+      grid-template-columns:1.2fr 1fr 1fr .8fr;
+      gap:10px;
+    }
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+    }
+    .box{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:var(--soft);
+      padding:14px;
+    }
+    .box .k{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:6px;
+    }
+    .box .v{
+      font-size:24px;
+      font-weight:800;
+      letter-spacing:.01em;
+      word-break:break-word;
+    }
+    .box .s{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+    th,td{
+      border-bottom:1px solid var(--line);
+      padding:10px 8px;
+      text-align:left;
+      vertical-align:top;
+    }
+    th{
+      font-size:12px;
+      color:#374151;
+      background:#f8fafc;
+      position:sticky;
+      top:0;
+    }
+    .num{text-align:right;white-space:nowrap}
+    .muted{color:var(--muted)}
+    .estimate{
+      white-space:pre-wrap;
+      font-size:14px;
+      line-height:1.75;
+      background:#fbfffe;
+      border:1px dashed #b8ddd8;
+      border-radius:16px;
+      padding:14px;
+    }
+    .toolbar{
+      position:sticky;
+      bottom:8px;
+      z-index:5;
+      margin-top:10px;
+    }
+    .toolbar-inner{
+      display:flex;
+      gap:10px;
+      padding:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(10px);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+    }
+    .toolbar-inner .btn{flex:1}
+    .note{
+      font-size:12px;
+      color:#6b7280;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      padding:10px 12px;
+      border-radius:12px;
+    }
+    .ok{
+      font-size:12px;
+      color:#065f46;
+      background:#ecfdf5;
+      border:1px solid #a7f3d0;
+      padding:10px 12px;
+      border-radius:12px;
+    }
+    .hide-print{}
+    @media (max-width:760px){
+      .g2,.g3,.g4,.summary-grid,.room-grid{grid-template-columns:1fr}
+      .toolbar-inner{flex-direction:column}
+      h1{font-size:24px}
+      .box .v{font-size:22px}
+      .room-top{align-items:flex-start;flex-direction:column}
+      .card{padding:14px}
+    }
+    @media print{
+      body{background:#fff}
+      .hide-print,.toolbar{display:none!important}
+      .card{box-shadow:none;border-color:#ddd}
+      .wrap{max-width:none;padding:0}
+      a{color:inherit;text-decoration:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>大工用フロア見積アプリ 完全版</h1>
+      <p class="lead">公開URL向け / スマホ最適化 / UI整理 / 複数部屋対応 / 材料費＋施工手間2800円/㎡ 固定</p>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <h2>現場情報</h2>
+        <span class="mini">Safariでそのまま使えるHTML</span>
+      </div>
+      <div class="grid g3">
+        <div>
+          <label for="siteName">現場名</label>
+          <input id="siteName" type="text" placeholder="例：若菜邸 フロア張替" />
+        </div>
+        <div>
+          <label for="clientName">宛名</label>
+          <input id="clientName" type="text" placeholder="例：若菜様" />
+        </div>
+        <div>
+          <label for="lossRate">ロス率</label>
+          <select id="lossRate">
+            <option value="0">0%</option>
+            <option value="3">3%</option>
+            <option value="5" selected>5%</option>
+            <option value="10">10%</option>
+          </select>
+        </div>
+        <div class="full">
+          <label for="memo">備考</label>
+          <textarea id="memo" placeholder="例：材料費・施工手間込み / 見切り別途 / 既存処分別途"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <h2>材料プリセット</h2>
+        <span class="mini">選択で寸法・箱入数・単価反映</span>
+      </div>
+      <div class="grid g4">
+        <div>
+          <label for="preset">材料名</label>
+          <select id="preset"></select>
+          <div class="pill" id="presetMeta">-</div>
+        </div>
+        <div>
+          <label for="matWidth">幅(mm)</label>
+          <input id="matWidth" type="number" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="matLength">長さ(mm)</label>
+          <input id="matLength" type="number" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="piecesPerCase">箱入数(枚)</label>
+          <input id="piecesPerCase" type="number" inputmode="numeric" />
+        </div>
+        <div>
+          <label for="casePrice">ケース単価(円)</label>
+          <input id="casePrice" type="number" inputmode="numeric" />
+        </div>
+        <div>
+          <label for="laborRate">施工手間(円/㎡)</label>
+          <input id="laborRate" type="number" inputmode="numeric" value="2800" />
+        </div>
+        <div>
+          <label for="direction">張り方向補助</label>
+          <select id="direction">
+            <option value="auto">自動判定</option>
+            <option value="long">材料長さを部屋長手へ</option>
+            <option value="short">材料長さを部屋短手へ</option>
+          </select>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button class="btn green" id="applyPresetBtn">プリセット反映</button>
+        </div>
+      </div>
+
+      <div class="preset-links">
+        <b>フローリング種別</b><br>
+        • （松）東洋テックス 匠 <a href="https://www.toyotex.co.jp/flooring/takumi-rustic/" target="_blank" rel="noopener">商品ページを見る</a><br>
+        • （竹）東洋テックス WILD <a href="https://www.toyotex.co.jp/flooring/wp/" target="_blank" rel="noopener">商品ページを見る</a><br>
+        • （梅）東洋テックス Juri <a href="https://www.toyotex.co.jp/flooring/juri/" target="_blank" rel="noopener">商品ページを見る</a>
+      </div>
+      <div class="note" style="margin-top:10px;">材料費は「ケース単価」で計算。施工手間は初期値2800円/㎡固定で入れてあるが、必要なら変更できる。</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <h2>部屋入力</h2>
+        <span class="mini">複数部屋合算対応</span>
+      </div>
+      <div class="actions hide-print" style="margin-bottom:12px;">
+        <button class="btn primary" id="addRoomBtn">部屋を追加</button>
+        <button class="btn sub" id="sampleBtn">サンプル入力</button>
+        <button class="btn ghost" id="resetBtn">全クリア</button>
+      </div>
+      <div id="rooms" class="rooms"></div>
+      <div class="ok" style="margin-top:10px;">同じ寸法の部屋が複数あるときは「数量」にまとめて入れられる。</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <h2>集計結果</h2>
+        <span class="mini">材料費＋施工手間の合計</span>
+      </div>
+      <div class="summary-grid">
+        <div class="box">
+          <div class="k">合計面積</div>
+          <div class="v" id="sumArea">-</div>
+          <div class="s">㎡</div>
+        </div>
+        <div class="box">
+          <div class="k">合計坪数</div>
+          <div class="v" id="sumTsubo">-</div>
+          <div class="s">坪</div>
+        </div>
+        <div class="box">
+          <div class="k">必要枚数</div>
+          <div class="v" id="sumPieces">-</div>
+          <div class="s">ロスなし切り上げ</div>
+        </div>
+        <div class="box">
+          <div class="k">ケース数</div>
+          <div class="v" id="sumCases">-</div>
+          <div class="s">発注ケース数</div>
+        </div>
+        <div class="box">
+          <div class="k">材料費</div>
+          <div class="v" id="materialCost">-</div>
+          <div class="s">ケース単価ベース</div>
+        </div>
+        <div class="box">
+          <div class="k">施工手間</div>
+          <div class="v" id="laborCost">-</div>
+          <div class="s">㎡×手間単価</div>
+        </div>
+        <div class="box">
+          <div class="k">合計金額</div>
+          <div class="v" id="totalCost">-</div>
+          <div class="s">材料費＋施工手間</div>
+        </div>
+        <div class="box">
+          <div class="k">材料情報</div>
+          <div class="v" id="matInfo" style="font-size:16px;font-weight:700;">-</div>
+          <div class="s" id="layoutInfo">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <h2>部屋別明細</h2>
+        <span class="mini">割付補助つき</span>
+      </div>
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>部屋名</th>
+              <th class="num">横(mm)</th>
+              <th class="num">縦(mm)</th>
+              <th class="num">数量</th>
+              <th class="num">面積(㎡)</th>
+              <th class="num">概算枚数</th>
+              <th>割付補助</th>
+            </tr>
+          </thead>
+          <tbody id="detailBody">
+            <tr><td colspan="7" class="muted">まだ計算されていません。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <h2>見積文面</h2>
+        <span class="mini">そのまま送信・保存用</span>
+      </div>
+      <div class="actions hide-print" style="margin-bottom:12px;">
+        <button class="btn green" id="calcBtn">計算する</button>
+        <button class="btn sub" id="copyBtn">見積文面をコピー</button>
+        <button class="btn ghost" id="printBtn">PDF出力 / 印刷</button>
+      </div>
+      <div class="estimate" id="estimateText">まだ計算されていません。</div>
+    </div>
+
+    <div class="toolbar hide-print">
+      <div class="toolbar-inner">
+        <button class="btn primary" id="calcBtnBottom">計算する</button>
+        <button class="btn green" id="copyBtnBottom">コピー</button>
+        <button class="btn ghost" id="printBtnBottom">PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "daiku_floor_app_complete_v1";
+    const presets = {
+      matsu: {
+        key: "matsu",
+        label: "（松）フロア",
+        width: 303,
+        length: 1820,
+        piecesPerCase: 6,
+        casePrice: 18500,
+        desc: "東洋テックス 匠",
+        url: "https://www.toyotex.co.jp/flooring/takumi-rustic/"
+      },
+      take: {
+        key: "take",
+        label: "（竹）フロア",
+        width: 303,
+        length: 1820,
+        piecesPerCase: 6,
+        casePrice: 17000,
+        desc: "東洋テックス WILD",
+        url: "https://www.toyotex.co.jp/flooring/wp/"
+      },
+      ume: {
+        key: "ume",
+        label: "（梅）フロア",
+        width: 303,
+        length: 1820,
+        piecesPerCase: 6,
+        casePrice: 14000,
+        desc: "東洋テックス Juri",
+        url: "https://www.toyotex.co.jp/flooring/juri/"
+      }
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const els = {
+      siteName: $("siteName"),
+      clientName: $("clientName"),
+      memo: $("memo"),
+      lossRate: $("lossRate"),
+      preset: $("preset"),
+      presetMeta: $("presetMeta"),
+      matWidth: $("matWidth"),
+      matLength: $("matLength"),
+      piecesPerCase: $("piecesPerCase"),
+      casePrice: $("casePrice"),
+      laborRate: $("laborRate"),
+      direction: $("direction"),
+      rooms: $("rooms"),
+      detailBody: $("detailBody"),
+      sumArea: $("sumArea"),
+      sumTsubo: $("sumTsubo"),
+      sumPieces: $("sumPieces"),
+      sumCases: $("sumCases"),
+      materialCost: $("materialCost"),
+      laborCost: $("laborCost"),
+      totalCost: $("totalCost"),
+      matInfo: $("matInfo"),
+      layoutInfo: $("layoutInfo"),
+      estimateText: $("estimateText")
+    };
+
+    function num(v){ return Number(v || 0); }
+    function ceil(v){ return Math.ceil(Number(v || 0)); }
+    function round(v, d=2){ return Number(Number(v || 0).toFixed(d)); }
+    function yen(v){ return "¥" + Math.round(Number(v || 0)).toLocaleString("ja-JP"); }
+    function fmt(v, d=2){
+      return Number(v || 0).toLocaleString("ja-JP", {minimumFractionDigits:0, maximumFractionDigits:d});
+    }
+
+    function saveState() {
+      const state = {
+        siteName: els.siteName.value,
+        clientName: els.clientName.value,
+        memo: els.memo.value,
+        lossRate: els.lossRate.value,
+        preset: els.preset.value,
+        matWidth: els.matWidth.value,
+        matLength: els.matLength.value,
+        piecesPerCase: els.piecesPerCase.value,
+        casePrice: els.casePrice.value,
+        laborRate: els.laborRate.value,
+        direction: els.direction.value,
+        rooms: getRooms()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try{
+        const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        if (s.siteName) els.siteName.value = s.siteName;
+        if (s.clientName) els.clientName.value = s.clientName;
+        if (s.memo) els.memo.value = s.memo;
+        if (s.lossRate) els.lossRate.value = s.lossRate;
+        if (s.direction) els.direction.value = s.direction;
+        renderPresets();
+        els.preset.value = s.preset || "matsu";
+        applyPresetToFields();
+        if (s.matWidth) els.matWidth.value = s.matWidth;
+        if (s.matLength) els.matLength.value = s.matLength;
+        if (s.piecesPerCase) els.piecesPerCase.value = s.piecesPerCase;
+        if (s.casePrice) els.casePrice.value = s.casePrice;
+        if (s.laborRate) els.laborRate.value = s.laborRate;
+        const rooms = Array.isArray(s.rooms) && s.rooms.length ? s.rooms : [{name:"洗面室", w:"3030", h:"1820", q:"1"}];
+        els.rooms.innerHTML = "";
+        rooms.forEach(addRoomCard);
+      }catch{
+        renderPresets();
+        els.preset.value = "matsu";
+        applyPresetToFields();
+        addRoomCard({name:"洗面室", w:"3030", h:"1820", q:"1"});
+      }
+    }
+
+    function renderPresets() {
+      els.preset.innerHTML = Object.values(presets).map(p => {
+        return `<option value="${p.key}">${p.label} / ${p.width}×${p.length} / ${p.piecesPerCase}枚入 / ${p.casePrice.toLocaleString("ja-JP")}円 / ${p.desc}</option>`;
+      }).join("");
+      updatePresetMeta();
+    }
+
+    function updatePresetMeta() {
+      const p = presets[els.preset.value];
+      if (!p) return;
+      els.presetMeta.textContent = `${p.desc} / ${p.width}×${p.length} / ${p.piecesPerCase}枚入 / ケース単価 ${p.casePrice.toLocaleString("ja-JP")}円`;
+    }
+
+    function applyPresetToFields() {
+      const p = presets[els.preset.value];
+      if (!p) return;
+      els.matWidth.value = p.width;
+      els.matLength.value = p.length;
+      els.piecesPerCase.value = p.piecesPerCase;
+      els.casePrice.value = p.casePrice;
+      updatePresetMeta();
+      saveState();
+    }
+
+    function roomTemplate(index, room={}) {
+      return `
+        <div class="room" data-index="${index}">
+          <div class="room-top">
+            <div class="room-name-badge">部屋 ${index + 1}</div>
+            <div class="room-actions hide-print">
+              <button class="btn sub clone-room" type="button">複製</button>
+              <button class="btn danger delete-room" type="button">削除</button>
+            </div>
+          </div>
+          <div class="room-grid">
+            <div>
+              <label>部屋名</label>
+              <input class="room-name" type="text" placeholder="例：LDK" value="${escapeAttr(room.name || "")}">
+            </div>
+            <div>
+              <label>横(mm)</label>
+              <input class="room-w" type="number" inputmode="numeric" placeholder="例：3030" value="${escapeAttr(room.w || "")}">
+            </div>
+            <div>
+              <label>縦(mm)</label>
+              <input class="room-h" type="number" inputmode="numeric" placeholder="例：1820" value="${escapeAttr(room.h || "")}">
+            </div>
+            <div>
+              <label>数量</label>
+              <input class="room-q" type="number" inputmode="numeric" min="1" placeholder="1" value="${escapeAttr(room.q || "1")}">
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindRoomCard(card) {
+      card.querySelectorAll("input").forEach(i => i.addEventListener("input", saveState));
+      card.querySelector(".clone-room").addEventListener("click", () => {
+        const data = getRoomFromCard(card);
+        addRoomCard(data);
+        renumberRooms();
+        saveState();
+      });
+      card.querySelector(".delete-room").addEventListener("click", () => {
+        if (els.rooms.children.length === 1) {
+          alert("最低1部屋は残してくれ。");
+          return;
+        }
+        card.remove();
+        renumberRooms();
+        saveState();
+      });
+    }
+
+    function addRoomCard(room={name:"", w:"", h:"", q:"1"}) {
+      const index = els.rooms.children.length;
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = roomTemplate(index, room);
+      const card = wrapper.firstElementChild;
+      els.rooms.appendChild(card);
+      bindRoomCard(card);
+    }
+
+    function renumberRooms() {
+      Array.from(els.rooms.children).forEach((card, i) => {
+        card.dataset.index = i;
+        const badge = card.querySelector(".room-name-badge");
+        badge.textContent = `部屋 ${i + 1}`;
+      });
+    }
+
+    function getRoomFromCard(card) {
+      return {
+        name: card.querySelector(".room-name").value.trim(),
+        w: card.querySelector(".room-w").value,
+        h: card.querySelector(".room-h").value,
+        q: card.querySelector(".room-q").value
+      };
+    }
+
+    function getRooms() {
+      return Array.from(els.rooms.children).map(getRoomFromCard);
+    }
+
+    function calcLayout(roomW, roomH, boardW, boardL, direction) {
+      const longSide = Math.max(roomW, roomH);
+      const shortSide = Math.min(roomW, roomH);
+
+      const a = {
+        label: "材料長さ→部屋長手",
+        rows: ceil(shortSide / boardW),
+        piecesPerRow: ceil(longSide / boardL)
+      };
+      a.total = a.rows * a.piecesPerRow;
+
+      const b = {
+        label: "材料長さ→部屋短手",
+        rows: ceil(longSide / boardW),
+        piecesPerRow: ceil(shortSide / boardL)
+      };
+      b.total = b.rows * b.piecesPerRow;
+
+      if (direction === "long") return a;
+      if (direction === "short") return b;
+      return a.total <= b.total ? a : b;
+    }
+
+    function calculate() {
+      const rooms = getRooms().filter(r => num(r.w) > 0 && num(r.h) > 0 && num(r.q) > 0);
+      const matW = num(els.matWidth.value);
+      const matL = num(els.matLength.value);
+      const piecesPerCase = num(els.piecesPerCase.value);
+      const casePrice = num(els.casePrice.value);
+      const laborRate = num(els.laborRate.value);
+      const lossRate = num(els.lossRate.value);
+
+      if (!rooms.length) {
+        alert("部屋寸法を入力してくれ。");
+        return;
+      }
+      if (!(matW > 0 && matL > 0 && piecesPerCase > 0)) {
+        alert("材料寸法、箱入数を正しく入れてくれ。");
+        return;
+      }
+
+      const boardArea = (matW * matL) / 1000000;
+      let totalArea = 0;
+      let detailRows = [];
+      let rawPieces = 0;
+
+      rooms.forEach((r, idx) => {
+        const area = (num(r.w) * num(r.h) * num(r.q)) / 1000000;
+        const pieces = ceil(area / boardArea);
+        const layout = calcLayout(num(r.w), num(r.h), matW, matL, els.direction.value);
+        totalArea += area;
+        rawPieces += area / boardArea;
+        detailRows.push({
+          name: r.name || `部屋${idx+1}`,
+          w: num(r.w),
+          h: num(r.h),
+          q: num(r.q),
+          area,
+          pieces,
+          layout
+        });
+      });
+
+      const totalTsubo = totalArea / 3.305785;
+      const requiredPieces = ceil(rawPieces);
+      const orderedPieces = ceil(rawPieces * (1 + lossRate / 100));
+      const cases = ceil(orderedPieces / piecesPerCase);
+      const materialCost = cases * casePrice;
+      const laborCost = totalArea * laborRate;
+      const totalCost = materialCost + laborCost;
+
+      els.sumArea.textContent = fmt(totalArea, 3);
+      els.sumTsubo.textContent = fmt(totalTsubo, 3);
+      els.sumPieces.textContent = fmt(orderedPieces, 0);
+      els.sumCases.textContent = fmt(cases, 0);
+      els.materialCost.textContent = yen(materialCost);
+      els.laborCost.textContent = yen(laborCost);
+      els.totalCost.textContent = yen(totalCost);
+
+      const selectedPreset = presets[els.preset.value];
+      els.matInfo.textContent = `${selectedPreset.label} / ${matW}×${matL}`;
+      els.layoutInfo.textContent = `箱入数 ${piecesPerCase}枚 / ケース単価 ${casePrice.toLocaleString("ja-JP")}円 / ロス ${lossRate}%`;
+
+      els.detailBody.innerHTML = detailRows.map(d => `
+        <tr>
+          <td>${escapeHtml(d.name)}</td>
+          <td class="num">${fmt(d.w,0)}</td>
+          <td class="num">${fmt(d.h,0)}</td>
+          <td class="num">${fmt(d.q,0)}</td>
+          <td class="num">${fmt(d.area,3)}</td>
+          <td class="num">${fmt(d.pieces,0)}</td>
+          <td>${d.layout.label} / ${d.layout.rows}列 × ${d.layout.piecesPerRow}枚 = ${d.layout.total}枚</td>
+        </tr>
+      `).join("");
+
+      const roomText = detailRows.map(d => `・${d.name}　${d.w}×${d.h}mm × ${d.q}ヶ所　${fmt(d.area,3)}㎡`).join("\n");
+      const estimate = `${els.clientName.value ? els.clientName.value + "\n" : ""}お世話になっております。
+${els.siteName.value || "床工事"}のフロア見積内容です。
+
+【部屋内訳】
+${roomText}
+
+【材料】
+${selectedPreset.label}（${selectedPreset.desc}）
+寸法：${matW}×${matL}mm
+箱入数：${piecesPerCase}枚
+ケース単価：${casePrice.toLocaleString("ja-JP")}円
+
+【拾い出し】
+合計面積：${fmt(totalArea,3)}㎡（${fmt(totalTsubo,3)}坪）
+必要枚数：${fmt(requiredPieces,0)}枚
+発注枚数：${fmt(orderedPieces,0)}枚（ロス ${lossRate}%）
+ケース数：${fmt(cases,0)}ケース
+
+【金額】
+材料費：${yen(materialCost)}
+施工手間：${yen(laborCost)}（${laborRate.toLocaleString("ja-JP")}円/㎡）
+合計金額：${yen(totalCost)}
+
+${els.memo.value ? "【備考】\n" + els.memo.value + "\n\n" : ""}ご確認よろしくお願いいたします。`;
+
+      els.estimateText.textContent = estimate;
+      saveState();
+    }
+
+    function copyEstimate() {
+      const text = els.estimateText.textContent.trim();
+      if (!text || text === "まだ計算されていません。") {
+        alert("先に計算してくれ。");
+        return;
+      }
+      navigator.clipboard.writeText(text)
+        .then(() => alert("見積文面をコピーした。"))
+        .catch(() => alert("コピーできなかった。長押しで手動コピーしてくれ。"));
+    }
+
+    function sampleInput() {
+      els.siteName.value = "サンプル現場 フロア張替";
+      els.clientName.value = "山田様";
+      els.memo.value = "既存床処分別途。見切り・巾木別途。";
+      els.lossRate.value = "5";
+      els.preset.value = "matsu";
+      applyPresetToFields();
+      els.laborRate.value = "2800";
+      els.direction.value = "auto";
+      els.rooms.innerHTML = "";
+      [
+        {name:"洗面室", w:"3030", h:"1820", q:"1"},
+        {name:"トイレ", w:"910", h:"1820", q:"1"},
+        {name:"脱衣室", w:"1820", h:"1820", q:"1"}
+      ].forEach(addRoomCard);
+      saveState();
+      calculate();
+    }
+
+    function resetAll() {
+      if (!confirm("入力内容を全部クリアするか？")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      els.siteName.value = "";
+      els.clientName.value = "";
+      els.memo.value = "";
+      els.lossRate.value = "5";
+      els.direction.value = "auto";
+      els.laborRate.value = "2800";
+      els.preset.value = "matsu";
+      applyPresetToFields();
+      els.rooms.innerHTML = "";
+      addRoomCard({name:"", w:"", h:"", q:"1"});
+      els.sumArea.textContent = "-";
+      els.sumTsubo.textContent = "-";
+      els.sumPieces.textContent = "-";
+      els.sumCases.textContent = "-";
+      els.materialCost.textContent = "-";
+      els.laborCost.textContent = "-";
+      els.totalCost.textContent = "-";
+      els.matInfo.textContent = "-";
+      els.layoutInfo.textContent = "-";
+      els.detailBody.innerHTML = '<tr><td colspan="7" class="muted">まだ計算されていません。</td></tr>';
+      els.estimateText.textContent = "まだ計算されていません。";
+    }
+
+    function escapeAttr(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    $("applyPresetBtn").addEventListener("click", applyPresetToFields);
+    $("addRoomBtn").addEventListener("click", () => { addRoomCard({name:"", w:"", h:"", q:"1"}); renumberRooms(); saveState(); });
+    $("sampleBtn").addEventListener("click", sampleInput);
+    $("resetBtn").addEventListener("click", resetAll);
+    $("calcBtn").addEventListener("click", calculate);
+    $("calcBtnBottom").addEventListener("click", calculate);
+    $("copyBtn").addEventListener("click", copyEstimate);
+    $("copyBtnBottom").addEventListener("click", copyEstimate);
+    $("printBtn").addEventListener("click", () => window.print());
+    $("printBtnBottom").addEventListener("click", () => window.print());
+    els.preset.addEventListener("change", () => { updatePresetMeta(); applyPresetToFields(); });
+    [els.siteName, els.clientName, els.memo, els.lossRate, els.matWidth, els.matLength, els.piecesPerCase, els.casePrice, els.laborRate, els.direction].forEach(el => {
+      el.addEventListener("input", saveState);
+      el.addEventListener("change", saveState);
+    });
+
+    loadState();
+    calculate();
+  </script>
+</body>
+</html>
