@@ -1,0 +1,1 @@
+GitHub Pages 用の公開URL版です。index.html を public リポジトリにアップして Pages を有効化してください。

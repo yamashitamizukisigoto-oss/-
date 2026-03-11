@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>フロア施工 見積ツール 公開URL版</title>
+<meta name="theme-color" content="#111827">
+<style>
+body{margin:0;background:#f5f6f8;color:#1f2937;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+.wrap{max-width:920px;margin:0 auto;padding:14px}
+.hero{background:linear-gradient(135deg,#111827,#374151);color:#fff;border-radius:18px;padding:18px 16px;margin-bottom:14px}
+.hero h1{margin:0 0 6px;font-size:24px}.hero p{margin:0;font-size:13px;opacity:.9}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;margin:0 0 12px}h3{font-size:15px;margin:0 0 10px}
+.grid{display:grid;gap:10px}.g2,.roomGrid,.summary{grid-template-columns:1fr}
+label{display:block;font-size:12px;font-weight:700;color:#4b5563;margin:0 0 6px}
+input,select,textarea{width:100%;box-sizing:border-box;font-size:16px;border-radius:12px;border:1px solid #d1d5db;background:#fff;padding:12px 13px;-webkit-appearance:none;appearance:none}
+textarea{min-height:84px;resize:vertical}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+button{width:100%;box-sizing:border-box;font-size:16px;border-radius:12px;padding:12px 14px;border:none;font-weight:700;cursor:pointer;-webkit-appearance:none;appearance:none}
+.primary{background:#111827;color:#fff}.sub{background:#eef2f7;color:#111827}.green{background:#0f766e;color:#fff}.ghost{background:#fff;color:#111827;border:1px solid #d1d5db}
+.pill{display:inline-block;margin-top:8px;padding:5px 9px;background:#f3f4f6;border-radius:999px;font-size:12px}
+.small{font-size:12px;color:#6b7280}.banner{background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;border-radius:12px;padding:10px 12px;font-size:12px;margin-bottom:12px}
+.rooms{display:grid;gap:10px}.room{background:#fafafa;border:1px solid #e5e7eb;border-radius:14px;padding:12px}
+.roomTop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;flex-direction:column}
+.roomBadge{font-size:12px;color:#6b7280;font-weight:700}.roomActions{display:flex;gap:8px;flex-wrap:wrap;width:100%}.roomActions button{flex:1;min-width:0;padding:10px 12px;font-size:13px}
+.roomGrid{display:grid;gap:10px}.shapeSection{display:none}.shapeSection.active{display:grid;gap:10px}
+.typeCards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.typeCard{border:2px solid #d1d5db;border-radius:10px;padding:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;background:#fff;user-select:none}
+.typeCard.active{border-color:#0f766e;background:#ecfdf5;color:#065f46}
+.summary{display:grid;gap:10px}.box{background:#fafafa;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.k{font-size:12px;color:#6b7280;font-weight:700;margin-bottom:6px}.v{font-size:24px;font-weight:800;word-break:break-word}.s{font-size:12px;color:#6b7280;margin-top:6px}
+.detailCards,.planCards{display:grid;gap:10px}.detailCard,.planCard{background:#fafafa;border:1px solid #e5e7eb;border-radius:14px;padding:12px}
+.detailTitle,.planTitle{font-size:15px;font-weight:700;margin-bottom:8px}
+.detailRow{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #eceff3}.detailRow:last-child{border-bottom:none}
+.detailLabel{font-size:12px;color:#6b7280;font-weight:700}.detailValue{font-size:14px;text-align:right}
+.planWrap{display:flex;justify-content:center;align-items:center;padding:8px 0 2px}.planSvg{width:100%;max-width:420px;height:auto;display:block}.legend{margin-top:8px;font-size:12px;color:#6b7280;text-align:center}
+.report-page{background:#fff;border:2px solid #d1d5db;border-radius:16px;padding:16px}.report-title{font-size:20px;font-weight:800;margin-bottom:12px}
+.report-section{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #e5e7eb}.report-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.report-grid{display:grid;gap:8px}.report-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed #e5e7eb}.report-row:last-child{border-bottom:none}
+.report-label{font-size:12px;color:#6b7280;font-weight:700}.report-value{font-size:14px;text-align:right}
+@media print{body{background:#fff}.no-print{display:none!important}.wrap{max-width:none;padding:0}.card{display:none}.print-only-card{display:block!important;border:none;margin:0;padding:0}.report-page{border:none;border-radius:0;padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero no-print"><h1>フロア施工 見積ツール</h1><p>GitHub Pages / 公開URL版。LINE共有向けに安定動作を優先。</p></div>
+  <div class="banner no-print">GitHub Pages 用の公開URL版。入力内容はこの端末内に自動保存されます。</div>
+
+  <div class="card no-print">
+    <h2>現場情報</h2>
+    <div class="grid g2">
+      <div><label for="siteName">現場名</label><input id="siteName" type="text" placeholder="例：若菜邸 フロア張替"></div>
+      <div><label for="clientName">お客様名</label><input id="clientName" type="text" placeholder="例：若菜様"></div>
+      <div><label for="lossRate">ロス率</label><select id="lossRate"><option value="0">0%</option><option value="3">3%</option><option value="5" selected>5%</option><option value="10">10%</option></select></div>
+      <div><label for="laborRate">施工手間（円/㎡）</label><input id="laborRate" type="number" inputmode="numeric" value="2800"></div>
+      <div><label for="subMatRate">副資材費（ウレタンボンド・釘 / 円/㎡）</label><input id="subMatRate" type="number" inputmode="numeric" value="300"></div>
+      <div style="grid-column:1/-1"><label for="memo">備考</label><textarea id="memo" placeholder="例：材料費・施工手間込み / 見切り別途 / 既存処分別途"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card no-print">
+    <h2>材料設定</h2>
+    <div class="grid g2">
+      <div><label for="preset">材料プリセット</label>
+        <select id="preset">
+          <option value="matsu">（松）フロア / 303×1820 / 6枚入 / 18,500円 / 東洋テックス 匠</option>
+          <option value="take">（竹）フロア / 303×1820 / 6枚入 / 17,000円 / 東洋テックス WILD</option>
+          <option value="ume">（梅）フロア / 303×1820 / 6枚入 / 14,000円 / 東洋テックス Juri</option>
+        </select>
+        <div class="pill" id="presetMeta"></div>
+      </div>
+      <div><label for="direction">張り方向補助</label><select id="direction"><option value="auto">自動判定</option><option value="long">材料長さを部屋長手へ</option><option value="short">材料長さを部屋短手へ</option></select></div>
+      <div><label for="matWidth">幅(mm)</label><input id="matWidth" type="number" inputmode="numeric" value="303"></div>
+      <div><label for="matLength">長さ(mm)</label><input id="matLength" type="number" inputmode="numeric" value="1820"></div>
+      <div><label for="piecesPerCase">箱入数(枚)</label><input id="piecesPerCase" type="number" inputmode="numeric" value="6"></div>
+      <div><label for="casePrice">ケース単価(円)</label><input id="casePrice" type="number" inputmode="numeric" value="18500"></div>
+    </div>
+  </div>
+
+  <div class="card no-print">
+    <h2>部屋入力</h2>
+    <div class="actions" style="margin-bottom:12px;"><button class="primary" type="button" id="addRoomBtn">部屋を追加</button><button class="ghost" type="button" id="clearBtn">入力クリア</button></div>
+    <div id="rooms" class="rooms"></div>
+    <div class="small">施工タイプはカード選択。L字は外寸から右下の欠き寸法を引く方式。</div>
+  </div>
+
+  <div class="card no-print">
+    <h2>集計結果</h2>
+    <div class="summary">
+      <div class="box"><div class="k">合計面積</div><div class="v" id="sumArea">-</div><div class="s">㎡</div></div>
+      <div class="box"><div class="k">合計坪数</div><div class="v" id="sumTsubo">-</div><div class="s">坪</div></div>
+      <div class="box"><div class="k">必要枚数</div><div class="v" id="sumPieces">-</div><div class="s">ロス込み発注枚数</div></div>
+      <div class="box"><div class="k">ケース数</div><div class="v" id="sumCases">-</div><div class="s">部屋別計算</div></div>
+      <div class="box"><div class="k">材料費</div><div class="v" id="materialCost">-</div><div class="s">ケース単価ベース</div></div>
+      <div class="box"><div class="k">施工手間</div><div class="v" id="laborCost">-</div><div class="s">㎡×手間単価</div></div>
+      <div class="box"><div class="k">ゴミ処分費</div><div class="v" id="wasteCost">-</div><div class="s">施工手間×0.1</div></div>
+      <div class="box"><div class="k">養生・清掃費</div><div class="v" id="cleanCost">-</div><div class="s">施工手間×0.1</div></div>
+      <div class="box"><div class="k">巾木 / 突きつけm数</div><div class="v" id="perimeterLength">-</div><div class="s">外周の全長（m）</div></div>
+      <div class="box"><div class="k">巾木 / 突きつけ施工費</div><div class="v" id="perimeterCost">-</div><div class="s">外周(m) × 700</div></div>
+      <div class="box"><div class="k">副資材費</div><div class="v" id="subMatCost">-</div><div class="s">㎡ × 副資材単価</div></div>
+      <div class="box"><div class="k">和室→洋間下地工事</div><div class="v" id="washitsuBaseCost">-</div><div class="s">㎡ × 6500</div></div>
+      <div class="box"><div class="k">畳処分費</div><div class="v" id="tatamiDisposalCost">-</div><div class="s">㎡ × 1500</div></div>
+      <div class="box"><div class="k">合計金額</div><div class="v" id="totalCost">-</div><div class="s">材料費＋諸経費</div></div>
+      <div class="box"><div class="k">材料情報</div><div class="v" id="matInfo" style="font-size:16px;font-weight:700;">-</div><div class="s" id="layoutInfo">-</div></div>
+    </div>
+  </div>
+
+  <div class="card no-print"><h2>部屋別明細</h2><div id="detailCards" class="detailCards"><div class="detailCard"><div class="small">まだ計算されていません。</div></div></div></div>
+  <div class="card no-print"><h2>平面図</h2><div id="planCards" class="planCards"><div class="planCard"><div class="small">部屋を入力すると平面図が表示されます。</div></div></div></div>
+
+  <div class="card print-only-card" style="display:none;"><div class="report-page"><div class="report-title">フロア施工見積 まとめページ</div><div class="report-section"><h3>現場情報</h3><div class="report-grid" id="reportSiteInfo"></div></div><div class="report-section"><h3>集計結果</h3><div class="report-grid" id="reportSummary"></div></div><div class="report-section"><h3>部屋別明細</h3><div id="reportDetails"></div></div><div class="report-section"><h3>平面図</h3><div id="reportPlans"></div></div></div></div>
+</div>
+
+<script>
+const STORAGE_KEY = "floor_app_public_url_v1";
+const presets = {
+  matsu:{label:"（松）フロア", width:303, length:1820, piecesPerCase:6, casePrice:18500, desc:"東洋テックス 匠"},
+  take:{label:"（竹）フロア", width:303, length:1820, piecesPerCase:6, casePrice:17000, desc:"東洋テックス WILD"},
+  ume:{label:"（梅）フロア", width:303, length:1820, piecesPerCase:6, casePrice:14000, desc:"東洋テックス Juri"}
+};
+const gid = id => document.getElementById(id);
+const num = v => Number(v || 0);
+const ceil = v => Math.ceil(Number(v || 0));
+const fmt = (v,d=2) => Number(v || 0).toLocaleString("ja-JP",{minimumFractionDigits:0, maximumFractionDigits:d});
+const yen = v => "¥" + Math.round(Number(v || 0)).toLocaleString("ja-JP");
+const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+function updatePresetMeta(){ const p = presets[gid("preset").value] || presets.matsu; gid("presetMeta").textContent = `${p.desc} / ${p.width}×${p.length} / ${p.piecesPerCase}枚入 / ケース単価 ${p.casePrice.toLocaleString("ja-JP")}円`; }
+function applyPreset(){ const p = presets[gid("preset").value] || presets.matsu; gid("matWidth").value = p.width; gid("matLength").value = p.length; gid("piecesPerCase").value = p.piecesPerCase; gid("casePrice").value = p.casePrice; updatePresetMeta(); calculate(); }
+function roomPresetOptions(selected){ const cur = selected || "default"; return `<option value="default" ${cur==="default"?"selected":""}>共通設定を使う</option><option value="matsu" ${cur==="matsu"?"selected":""}>（松）フロア</option><option value="take" ${cur==="take"?"selected":""}>（竹）フロア</option><option value="ume" ${cur==="ume"?"selected":""}>（梅）フロア</option>`; }
+function renumberRooms(){ [...gid("rooms").children].forEach((card,i)=> card.querySelector(".roomBadge").textContent = `部屋 ${i+1}`); }
+function toggleShapeFields(card){ const shape = card.querySelector(".room-shape").value; card.querySelector(".shape-rect").classList.toggle("active", shape==="rect"); card.querySelector(".shape-l").classList.toggle("active", shape==="l"); }
+function bindRoomTypeCards(card){ const overlay = card.querySelector(".room-type-overlay"); const washitsu = card.querySelector(".room-type-washitsu"); function apply(type){ card.dataset.roomType = type; overlay.classList.toggle("active", type==="overlay"); washitsu.classList.toggle("active", type==="washitsu"); } apply(card.dataset.roomType || "overlay"); overlay.onclick = ()=>{ apply("overlay"); saveState(); calculate(); }; washitsu.onclick = ()=>{ apply("washitsu"); saveState(); calculate(); }; }
+function bindRoomCard(card){ card.querySelector(".clone-room").onclick = ()=> addRoomCard(getRoomFromCard(card)); card.querySelector(".delete-room").onclick = ()=>{ if(gid("rooms").children.length <= 1){ alert("最低1部屋は残してくれ。"); return; } card.remove(); renumberRooms(); saveState(); calculate(); }; card.querySelectorAll("input, select").forEach(el=>{ el.addEventListener("input", ()=>{ if(el.classList.contains("room-shape")) toggleShapeFields(card); saveState(); calculate(); }); el.addEventListener("change", ()=>{ if(el.classList.contains("room-shape")) toggleShapeFields(card); saveState(); calculate(); }); }); toggleShapeFields(card); bindRoomTypeCards(card); }
+function addRoomCard(room){ room = room || {name:"", shape:"rect", w:"", h:"", outerW:"", outerH:"", cutW:"", cutH:"", q:"1", preset:"default", roomType:"overlay"}; const index = gid("rooms").children.length; const wrap = document.createElement("div"); wrap.className = "room"; wrap.dataset.roomType = room.roomType || "overlay"; wrap.innerHTML = `<div class="roomTop"><div class="roomBadge">部屋 ${index+1}</div><div class="roomActions"><button class="sub clone-room" type="button">複製</button><button class="ghost delete-room" type="button">削除</button></div></div><div class="roomGrid"><div><label>部屋名</label><input class="room-name" type="text" value="${esc(room.name)}" placeholder="例：LDK"></div><div><label>形状</label><select class="room-shape"><option value="rect" ${room.shape==="rect"?"selected":""}>長方形</option><option value="l" ${room.shape==="l"?"selected":""}>L字</option></select></div><div><label>数量</label><input class="room-q" type="number" inputmode="numeric" min="1" value="${esc(room.q || "1")}" placeholder="1"></div><div><label>材料プリセット</label><select class="room-preset">${roomPresetOptions(room.preset)}</select></div><div><label style="font-weight:700">施工タイプ</label><div class="typeCards"><div class="typeCard room-type-overlay">既存床増し貼り</div><div class="typeCard room-type-washitsu">床上げあり（和室→洋間）</div></div></div></div><div class="shapeSection shape-rect"><div class="roomGrid"><div><label>横(mm)</label><input class="room-w" type="number" inputmode="numeric" value="${esc(room.w)}" placeholder="例：3030"></div><div><label>縦(mm)</label><input class="room-h" type="number" inputmode="numeric" value="${esc(room.h)}" placeholder="例：1820"></div></div></div><div class="shapeSection shape-l"><div class="roomGrid"><div><label>外寸 横(mm)</label><input class="room-outer-w" type="number" inputmode="numeric" value="${esc(room.outerW)}" placeholder="例：2730"></div><div><label>外寸 縦(mm)</label><input class="room-outer-h" type="number" inputmode="numeric" value="${esc(room.outerH)}" placeholder="例：2730"></div><div><label>欠き 横(mm)</label><input class="room-cut-w" type="number" inputmode="numeric" value="${esc(room.cutW)}" placeholder="例：910"></div><div><label>欠き 縦(mm)</label><input class="room-cut-h" type="number" inputmode="numeric" value="${esc(room.cutH)}" placeholder="例：910"></div></div></div>`; gid("rooms").appendChild(wrap); bindRoomCard(wrap); renumberRooms(); saveState(); calculate(); }
+function getRoomFromCard(card){ return { name: card.querySelector(".room-name").value, shape: card.querySelector(".room-shape").value, w: card.querySelector(".room-w").value, h: card.querySelector(".room-h").value, outerW: card.querySelector(".room-outer-w").value, outerH: card.querySelector(".room-outer-h").value, cutW: card.querySelector(".room-cut-w").value, cutH: card.querySelector(".room-cut-h").value, q: card.querySelector(".room-q").value, preset: card.querySelector(".room-preset").value, roomType: card.dataset.roomType || "overlay" }; }
+function getRooms(){ return [...gid("rooms").children].map(getRoomFromCard); }
+function roomGeometry(r){ const q = num(r.q); if(!(q > 0)) return null; if(r.shape === "l"){ const outerW=num(r.outerW), outerH=num(r.outerH), cutW=num(r.cutW), cutH=num(r.cutH); if(!(outerW>0 && outerH>0) || cutW<0 || cutH<0 || cutW>=outerW || cutH>=outerH) return null; return {shape:"l", q, outerW, outerH, cutW, cutH, displayW:outerW, displayH:outerH, area:(((outerW*outerH)-(cutW*cutH))*q)/1000000}; } else { const w=num(r.w), h=num(r.h); if(!(w>0 && h>0)) return null; return {shape:"rect", q, w, h, displayW:w, displayH:h, area:(w*h*q)/1000000}; } }
+function calcLayout(roomW, roomH, boardW, boardL, direction){ const longSide = Math.max(roomW, roomH), shortSide = Math.min(roomW, roomH); const a = {label:"材料長さ→部屋長手", rows:ceil(shortSide/boardW), piecesPerRow:ceil(longSide/boardL)}; a.total = a.rows * a.piecesPerRow; const b = {label:"材料長さ→部屋短手", rows:ceil(longSide/boardW), piecesPerRow:ceil(shortSide/boardL)}; b.total = b.rows * b.piecesPerRow; if(direction==="long") return a; if(direction==="short") return b; return a.total <= b.total ? a : b; }
+function buildPlanSvg(geom, label, area, direction, presetLabel){ const refW = geom.shape==="l" ? geom.outerW : geom.w; const refH = geom.shape==="l" ? geom.outerH : geom.h; let scale = Math.min(260 / Math.max(refW,1), 260 / Math.max(refH,1), 0.08); if(!isFinite(scale) || scale<=0) scale = 0.05; const rw = Math.max(70, Math.round(refW*scale)); const rh = Math.max(70, Math.round(refH*scale)); const vbW = rw + 120, vbH = rh + 150, x = (vbW-rw)/2, y=34; let shapeSvg = ""; if(geom.shape==="l"){ const cutW = Math.round(geom.cutW*scale), cutH = Math.round(geom.cutH*scale); const d = `M ${x} ${y} L ${x+rw} ${y} L ${x+rw} ${y+rh-cutH} L ${x+rw-cutW} ${y+rh-cutH} L ${x+rw-cutW} ${y+rh} L ${x} ${y+rh} Z`; shapeSvg = `<path d="${d}" fill="#f9fafb" stroke="#111827" stroke-width="3"/>`; } else { shapeSvg = `<rect x="${x}" y="${y}" width="${rw}" height="${rh}" rx="8" fill="#f9fafb" stroke="#111827" stroke-width="3"/>`; } let arrow = ""; if(direction==="short"){ const cx = x + rw/2; arrow = `<line x1="${cx}" y1="${y+12}" x2="${cx}" y2="${y+rh-12}" stroke="#0f766e" stroke-width="4" marker-start="url(#a)" marker-end="url(#a)"/>`; } else { const cy = y + rh/2; arrow = `<line x1="${x+12}" y1="${cy}" x2="${x+rw-12}" y2="${cy}" stroke="#0f766e" stroke-width="4" marker-start="url(#a)" marker-end="url(#a)"/>`; } const dims = geom.shape==="l" ? `外寸 ${fmt(geom.outerW,0)}×${fmt(geom.outerH,0)} / 欠き ${fmt(geom.cutW,0)}×${fmt(geom.cutH,0)} mm` : `横 ${fmt(geom.w,0)} / 縦 ${fmt(geom.h,0)} mm`; return `<svg class="planSvg" viewBox="0 0 ${vbW} ${vbH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0f766e"/></marker></defs><text x="${vbW/2}" y="18" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">${esc(label)}</text>${shapeSvg}${arrow}<text x="${vbW/2}" y="${y+rh+24}" text-anchor="middle" font-size="12" fill="#374151">${esc(dims)}</text><text x="${vbW/2}" y="${y+rh+44}" text-anchor="middle" font-size="12" fill="#374151">面積 ${fmt(area,3)} ㎡</text><text x="${vbW/2}" y="${y+rh+64}" text-anchor="middle" font-size="12" fill="#374151">材料 ${esc(presetLabel || "")}</text></svg>`; }
+function reportRow(label, value){ return `<div class="report-row"><div class="report-label">${esc(label)}</div><div class="report-value">${esc(value)}</div></div>`; }
+function buildReportPage(detail, totals, preset, direction){ gid("reportSiteInfo").innerHTML = reportRow("現場名", gid("siteName").value || "-") + reportRow("お客様名", gid("clientName").value || "-") + reportRow("ロス率", gid("lossRate").value + "%") + reportRow("副資材費単価", gid("subMatRate").value + "円/㎡") + reportRow("備考", gid("memo").value || "-") + reportRow("共通材料", `${preset.label} / ${gid("matWidth").value}×${gid("matLength").value} / ${gid("piecesPerCase").value}枚入 / ${Number(gid("casePrice").value).toLocaleString("ja-JP")}円`); gid("reportSummary").innerHTML = reportRow("合計面積", fmt(totals.totalArea,3) + "㎡") + reportRow("合計坪数", fmt(totals.totalTsubo,3) + "坪") + reportRow("必要枚数", fmt(totals.orderedPieces,0) + "枚") + reportRow("ケース数", "部屋別計算") + reportRow("材料費", yen(totals.materialCost)) + reportRow("施工手間", yen(totals.laborCost)) + reportRow("ゴミ処分費", yen(totals.wasteCost)) + reportRow("養生・清掃費", yen(totals.cleanCost)) + reportRow("巾木 / 突きつけm数", fmt(totals.totalPerimeter,2) + "m") + reportRow("巾木 / 突きつけ施工費", yen(totals.perimeterCost)) + reportRow("副資材費", yen(totals.subMatCost)) + reportRow("和室→洋間下地工事", yen(totals.washitsuBaseCostTotal)) + reportRow("畳処分費", yen(totals.tatamiDisposalCostTotal)) + reportRow("合計金額", yen(totals.totalCost)); let detailsHtml="", planHtml=""; detail.forEach(d=>{ const shapeLabel = d.geom.shape==="l" ? "L字" : "長方形"; const shapeDesc = d.geom.shape==="l" ? `外寸 ${fmt(d.geom.outerW,0)}×${fmt(d.geom.outerH,0)} / 欠き ${fmt(d.geom.cutW,0)}×${fmt(d.geom.cutH,0)}` : `${fmt(d.geom.w,0)}×${fmt(d.geom.h,0)}`; detailsHtml += `<div class="detailCard" style="margin-bottom:10px;"><div class="detailTitle">${esc(d.name)}</div><div class="detailRow"><div class="detailLabel">形状</div><div class="detailValue">${shapeLabel}</div></div><div class="detailRow"><div class="detailLabel">寸法</div><div class="detailValue">${shapeDesc} mm</div></div><div class="detailRow"><div class="detailLabel">数量</div><div class="detailValue">${fmt(d.q,0)}</div></div><div class="detailRow"><div class="detailLabel">材料</div><div class="detailValue">${d.presetLabel}</div></div><div class="detailRow"><div class="detailLabel">施工タイプ</div><div class="detailValue">${d.roomType==="washitsu" ? "床上げあり（和室→洋間）" : "既存床増し貼り"}</div></div><div class="detailRow"><div class="detailLabel">面積(㎡)</div><div class="detailValue">${fmt(d.area,3)}</div></div><div class="detailRow"><div class="detailLabel">概算枚数</div><div class="detailValue">${fmt(d.pieces,0)}枚</div></div><div class="detailRow"><div class="detailLabel">必要ケース</div><div class="detailValue">${d.cases}ケース</div></div><div class="detailRow"><div class="detailLabel">床材割付</div><div class="detailValue">${d.layout.label}<br>${d.layout.rows}列 × ${d.layout.piecesPerRow}枚 = ${d.layout.total}枚</div></div></div>`; planHtml += `<div style="margin-bottom:12px;">${buildPlanSvg(d.geom, d.name, d.area, direction, d.presetLabel)}</div>`; }); gid("reportDetails").innerHTML = detailsHtml || '<div class="small">明細なし</div>'; gid("reportPlans").innerHTML = planHtml || '<div class="small">平面図なし</div>'; }
+function calculate(){ const rooms = getRooms(); const laborRate = num(gid("laborRate").value), lossRate = num(gid("lossRate").value), direction = gid("direction").value, subMatRate = num(gid("subMatRate").value); let detail=[], totalArea=0, rawPieces=0, materialCost=0; rooms.forEach((r,i)=>{ const geom = roomGeometry(r); if(!geom) return; const roomPresetKey = (r.preset && r.preset !== "default") ? r.preset : gid("preset").value; const roomPreset = presets[roomPresetKey] || presets.matsu; const roomBoardArea = (roomPreset.width * roomPreset.length) / 1000000; const rawRoomPieces = geom.area / roomBoardArea; const pieces = ceil(geom.area / roomBoardArea); const orderedRoomPieces = ceil(rawRoomPieces * (1 + lossRate / 100)); const roomCases = ceil(orderedRoomPieces / roomPreset.piecesPerCase); const roomMaterialCost = roomCases * roomPreset.casePrice; const layout = calcLayout(geom.displayW, geom.displayH, roomPreset.width, roomPreset.length, direction); totalArea += geom.area; rawPieces += rawRoomPieces; materialCost += roomMaterialCost; detail.push({name:r.name || `部屋${i+1}`, q:num(r.q), area:geom.area, pieces, orderedPieces:orderedRoomPieces, cases:roomCases, layout, presetLabel:roomPreset.label, roomType:r.roomType, geom}); }); if(!detail.length) return; const totalTsubo = totalArea / 3.305785; const orderedPieces = ceil(rawPieces * (1 + lossRate / 100)); let totalPerimeter=0; detail.forEach(d=>{ const g=d.geom; totalPerimeter += (g.shape==="rect" ? (g.w+g.h)*2 : (g.outerW+g.outerH)*2) / 1000; }); const laborCost = totalArea * laborRate; const wasteCost = laborCost * 0.1; const cleanCost = laborCost * 0.1; const perimeterCost = totalPerimeter * 700; const subMatCost = totalArea * subMatRate; const washitsuBaseCostTotal = detail.filter(d=>d.roomType==="washitsu").reduce((s,d)=>s + d.area * 6500, 0); const tatamiDisposalCostTotal = detail.filter(d=>d.roomType==="washitsu").reduce((s,d)=>s + d.area * 1500, 0); const totalCost = materialCost + laborCost + wasteCost + cleanCost + perimeterCost + subMatCost + washitsuBaseCostTotal + tatamiDisposalCostTotal; const p = presets[gid("preset").value] || presets.matsu; gid("sumArea").textContent = fmt(totalArea,3); gid("sumTsubo").textContent = fmt(totalTsubo,3); gid("sumPieces").textContent = fmt(orderedPieces,0); gid("sumCases").textContent = "部屋別計算"; gid("materialCost").textContent = yen(materialCost); gid("laborCost").textContent = yen(laborCost); gid("wasteCost").textContent = yen(wasteCost); gid("cleanCost").textContent = yen(cleanCost); gid("perimeterLength").textContent = fmt(totalPerimeter,2) + "m"; gid("perimeterCost").textContent = yen(perimeterCost); gid("subMatCost").textContent = yen(subMatCost); gid("washitsuBaseCost").textContent = yen(washitsuBaseCostTotal); gid("tatamiDisposalCost").textContent = yen(tatamiDisposalCostTotal); gid("totalCost").textContent = yen(totalCost); gid("matInfo").textContent = `${p.label} / ${gid("matWidth").value}×${gid("matLength").value} / ${gid("piecesPerCase").value}枚入 / ${Number(gid("casePrice").value).toLocaleString("ja-JP")}円`; gid("layoutInfo").textContent = `長方形 / L字対応 / 部屋ごと材料プリセット対応 / ロス ${lossRate}% / 副資材 ${subMatRate}円/㎡`; gid("detailCards").innerHTML = detail.map(d=>{ const shapeLabel = d.geom.shape==="l" ? "L字" : "長方形"; const shapeDesc = d.geom.shape==="l" ? `外寸 ${fmt(d.geom.outerW,0)}×${fmt(d.geom.outerH,0)} / 欠き ${fmt(d.geom.cutW,0)}×${fmt(d.geom.cutH,0)}` : `${fmt(d.geom.w,0)}×${fmt(d.geom.h,0)}`; return `<div class="detailCard"><div class="detailTitle">${esc(d.name)}</div><div class="detailRow"><div class="detailLabel">形状</div><div class="detailValue">${shapeLabel}</div></div><div class="detailRow"><div class="detailLabel">寸法</div><div class="detailValue">${shapeDesc} mm</div></div><div class="detailRow"><div class="detailLabel">数量</div><div class="detailValue">${fmt(d.q,0)}</div></div><div class="detailRow"><div class="detailLabel">材料</div><div class="detailValue">${d.presetLabel}</div></div><div class="detailRow"><div class="detailLabel">施工タイプ</div><div class="detailValue">${d.roomType==="washitsu" ? "床上げあり（和室→洋間）" : "既存床増し貼り"}</div></div><div class="detailRow"><div class="detailLabel">面積(㎡)</div><div class="detailValue">${fmt(d.area,3)}</div></div><div class="detailRow"><div class="detailLabel">概算枚数</div><div class="detailValue">${fmt(d.pieces,0)}枚</div></div><div class="detailRow"><div class="detailLabel">必要ケース</div><div class="detailValue">${d.cases}ケース</div></div><div class="detailRow"><div class="detailLabel">床材割付</div><div class="detailValue">${d.layout.label}<br>${d.layout.rows}列 × ${d.layout.piecesPerRow}枚 = ${d.layout.total}枚</div></div></div>`; }).join(""); gid("planCards").innerHTML = detail.map(d=>`<div class="planCard"><div class="planTitle">${esc(d.name)}</div><div class="planWrap">${buildPlanSvg(d.geom, d.name, d.area, direction, d.presetLabel)}</div><div class="legend">入力寸法から自動生成した ${d.geom.shape==="l" ? "L字" : "長方形"} 平面図</div></div>`).join(""); buildReportPage(detail, {totalArea,totalTsubo,orderedPieces,materialCost,laborCost,wasteCost,cleanCost,totalPerimeter,perimeterCost,subMatCost,washitsuBaseCostTotal,tatamiDisposalCostTotal,totalCost}, p, direction); saveState(); }
+function saveState(){ const state = { siteName:gid("siteName").value, clientName:gid("clientName").value, lossRate:gid("lossRate").value, laborRate:gid("laborRate").value, subMatRate:gid("subMatRate").value, memo:gid("memo").value, preset:gid("preset").value, direction:gid("direction").value, matWidth:gid("matWidth").value, matLength:gid("matLength").value, piecesPerCase:gid("piecesPerCase").value, casePrice:gid("casePrice").value, rooms:getRooms() }; try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+function loadState(){ try{ const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); if(s.siteName!=null) gid("siteName").value=s.siteName; if(s.clientName!=null) gid("clientName").value=s.clientName; if(s.lossRate!=null) gid("lossRate").value=s.lossRate; if(s.laborRate!=null) gid("laborRate").value=s.laborRate; if(s.subMatRate!=null) gid("subMatRate").value=s.subMatRate; if(s.memo!=null) gid("memo").value=s.memo; if(s.preset!=null) gid("preset").value=s.preset; if(s.direction!=null) gid("direction").value=s.direction; if(s.matWidth!=null) gid("matWidth").value=s.matWidth; if(s.matLength!=null) gid("matLength").value=s.matLength; if(s.piecesPerCase!=null) gid("piecesPerCase").value=s.piecesPerCase; if(s.casePrice!=null) gid("casePrice").value=s.casePrice; gid("rooms").innerHTML=""; if(Array.isArray(s.rooms) && s.rooms.length){ s.rooms.forEach(r=>addRoomCard(r)); } else { addRoomCard({name:"洗面室", shape:"rect", w:"3030", h:"1820", q:"1", preset:"default", roomType:"overlay"}); } }catch(e){ gid("rooms").innerHTML=""; addRoomCard({name:"洗面室", shape:"rect", w:"3030", h:"1820", q:"1", preset:"default", roomType:"overlay"}); } }
+function clearAll(){ if(!confirm("入力内容をクリアするか？")) return; try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} location.reload(); }
+gid("preset").addEventListener("change", applyPreset);
+["siteName","clientName","lossRate","laborRate","subMatRate","memo","direction","matWidth","matLength","piecesPerCase","casePrice"].forEach(id=>{ gid(id).addEventListener("input", calculate); gid(id).addEventListener("change", calculate); });
+gid("addRoomBtn").addEventListener("click", ()=> addRoomCard());
+gid("clearBtn").addEventListener("click", clearAll);
+updatePresetMeta(); loadState(); calculate();
+</script>
+</body></html>
